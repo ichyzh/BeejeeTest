@@ -10,6 +10,12 @@ class UserController extends Controller
 {
     public function actionSingIn()
     {
+        $user = new User();
+
+        if ($user->isAuthorized()) {
+            return $this->view->redirect('/' .ROOT . '/');
+        }
+
         return $this->view->render('login.twig');
     }
 
@@ -18,6 +24,7 @@ class UserController extends Controller
         if (!isset($_POST['submit'])) {
             View::errorCode(404);
         }
+
         $user = new User();
 
         $errors = $user->login($_POST);
