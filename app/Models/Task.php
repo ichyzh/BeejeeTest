@@ -5,8 +5,6 @@ use App\core\Model;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\NestedValidationException;
 
-
-
 class Task extends Model
 {
     public function getAll(array $pagination) :array
@@ -123,7 +121,11 @@ class Task extends Model
         $number_of_photos = $res->rowCount();
         $number_of_pages = ceil($number_of_photos/$number_of_posts);
 
-        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+        if (isset($_GET['page']) && $_GET['page'] > 0) {
+            $page = $_GET['page'];
+        } else {
+            $page = 1;
+        }
 
         $this_page_result = ($page - 1)*$number_of_posts;
         $pagination = [

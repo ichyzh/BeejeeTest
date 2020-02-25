@@ -3,11 +3,12 @@
 namespace App\core;
 
 use PDO;
+use PDOException;
 
 class Db
 {
     protected $dbh;
-    protected $conf_path = 'app/config/db.php';
+    protected $conf_path = '../app/config/db.php';
 
     public function __construct()
     {
@@ -15,7 +16,6 @@ class Db
         try {
             $this->dbh = new PDO($config['db_dsn'] . $config['db_name'], $config['db_user'], $config['db_password'], array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         } catch (PDOException $e) {
-            print "Error!: " . $e->getMessage() . "<br/>";
             die();
         }
     }

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\core\Model;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\NestedValidationException;
+
 class User extends Model
 {
     public function login(array $request) :array

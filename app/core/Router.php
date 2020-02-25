@@ -4,7 +4,7 @@ namespace App\core;
 
 class Router
 {
-    protected $route_path = 'app/config/routes.php';
+    protected $route_path = '../app/config/routes.php';
     protected $routes = [];
     protected $params = [];
     protected $root;

@@ -20,16 +20,12 @@ class View
 
     public function render(string $title, array $vars = [], $pag = [])
     {
-        $loader = new FilesystemLoader('resources/views');
-        $twig = new Environment($loader, [
-            'debug' => true
-        ]);
+        $loader = new FilesystemLoader('../resources/views');
+        $twig = new Environment($loader);
 
-        $twig->addExtension(new \Twig\Extension\DebugExtension());
-        
         $vars['ROOT'] = ROOT;
         $vars['user'] = new User();
-        $vars['request'] = $_GET;
+        $vars['request'] = $_GET ?? [];
 
         echo $twig->render($title, $vars);
     }
@@ -37,7 +33,7 @@ class View
     public static function errorCode($code)
     {
         http_response_code($code);
-        echo 'ERROR';
+        echo "<div><p>Error {$code}</p></div>";
         exit;
     }
 
