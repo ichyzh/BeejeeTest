@@ -4,22 +4,47 @@
 <div class="row justify-content-center my-2">
     <div class="col-md-6">
         <div class="card rounded-0">
-            <div class="card-header">Create Task</div>
+            <div class="card-header">
+                {% if task is defined %}
+                    Edit Task
+                {% else %}
+                    Create Task
+                {% endif %}
+            </div>
             <div class="card-body">
-                <form action="/{{ ROOT }}/task/store" method="POST">
+                <form action="{% if task is defined %}/{{ ROOT }}/task/update/{{ task['id'] }}{% else %} /{{ ROOT }}/task/store {% endif %}" method="POST">
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input class="form-control" type="text" name="username" placeholder="Username">
+                        <input class="form-control" type="text" name="username" placeholder="Username" 
+                            {% if task is defined %}
+                                value="{{ task['username'] }}" disabled 
+                            {% endif %}
+                        >
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input class="form-control" type="email" name="email" placeholder="Email">
+                        <input class="form-control" type="email" name="email" placeholder="Email"
+                            {% if task is defined %}
+                                value="{{ task['email'] }}" disabled 
+                            {% endif %}
+                        >
                     </div>
                     <div class="form-group">
                         <label for="task">Task</label>
-                        <textarea class="form-control" name="task" cols="5" rows="5"></textarea>
+                        <textarea class="form-control" name="task" cols="5" rows="5">{% if task is defined %}{{ task['text'] }}{% endif %}</textarea>
                     </div>
-                    <button type="submit" name="submit" class="btn btn-success">Save</button>
+                    {% if task is defined %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="status" name="status" 
+                                {% if task['status'] == 'Y' %} 
+                                    checked 
+                                {% endif %}
+                            >
+                            <label class="form-check-label" for="status">Status</label>
+                        </div> 
+                        <input type="hidden" name="id" value="{{ task['id'] }}">
+                    {% endif %}
+                    <button type="submit" name="submit" class="btn btn-success mt-2">Save</button>
                 </form>
             </div>
         </div>

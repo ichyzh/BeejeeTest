@@ -13,7 +13,7 @@ class User extends Model
             'password' => $request['password']
         ];
 
-        $sql = "SELECT * FROM `users` WHERE `username`= '{$params['username']}'";
+        $sql = "SELECT * FROM `users` WHERE `username`= :username'";
         $user = $this->dbh->row($sql, $params);
 
         if (empty($user)) {

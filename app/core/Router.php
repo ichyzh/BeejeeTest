@@ -35,13 +35,8 @@ class Router
         foreach ($this->routes as $route => $params) {
             if (preg_match($route, $url, $matches)) {
                 foreach ($matches as $key => $match) {
-                    if (strlen($match) != 0) {
-                        if (is_numeric($key)) {
-                            $str = explode("/", $match);
-                            if ($str[0] == "profile") {
-                                $params[$str[0]] = $str[1];
-                            }
-                        }
+                    if ($key === 'id') {
+                        $params[$key] = $match;
                     }
                 }
                 $this->params = $params;
