@@ -69,7 +69,7 @@ class TaskController extends Controller
         $item = new Task();
         $task = $item->getItem($this->route['id']);
 
-        $errors = $task->update($_POST);
+        $errors = $item->update($_POST);
 
         if (!empty($errors)) {
             return $this->view->render('create.twig', [

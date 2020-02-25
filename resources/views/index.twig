@@ -8,25 +8,45 @@
             <div class="card-body">
                 <table class="table">
                     <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Task</th>
-                        <th scope="col">Status</th>
-                        {% if user.isAuthorized() %} 
-                            <th scope="col"></th>
-                        {% endif %}
-
-
-                      </tr>
+                        <tr>
+                            <th scope="col">
+                                <a href="
+                                {% if request.page is defined %}
+                                    /{{ ROOT }}/?page={{ request.page }}&sort=username&{% if request.order == 'desc' %}order=asc{% else %}order=desc{% endif %}
+                                {% else %}
+                                    /{{ ROOT }}/?sort=username&{% if request.order == 'desc' %}order=asc{% else %}order=desc{% endif %}
+                                {% endif %}
+                                ">Username</a>
+                            </th>
+                            <th scope="col">
+                                <a href="
+                                    {% if request.page is defined %}
+                                        /{{ ROOT }}/?page={{ request.page }}&sort=email&{% if request.order == 'desc' %}order=asc{% else %}order=desc{% endif %}
+                                    {% else %}
+                                        /{{ ROOT }}/?sort=email&{% if request.order == 'desc' %}order=asc{% else %}order=desc{% endif %}
+                                    {% endif %}
+                                ">Email</a>
+                            </th>
+                            <th scope="col">
+                                Task
+                            </th>
+                            <th scope="col">
+                                <a href="
+                                    {% if request.page is defined %}
+                                        /{{ ROOT }}/?page={{ request.page }}&sort=status&{% if request.order == 'desc' %}order=asc{% else %}order=desc{% endif %}
+                                    {% else %}
+                                        /{{ ROOT }}/?sort=status&{% if request.order == 'desc' %}order=asc{% else %}order=desc{% endif %}
+                                    {% endif %}
+                                ">Status</a>
+                            </th>
+                            {% if user.isAuthorized() %} 
+                                <th scope="col"></th>
+                            {% endif %}
+                        </tr>
                     </thead>
                     <tbody>
                         {% for task in task_list %}
                         <tr>
-                            <th scope="row">
-                                {{ loop.index }}
-                            </th>
                             <td>
                                 {{ task['username'] }}
                             </td>
@@ -59,6 +79,26 @@
                   </table>
             </div>
         </div>
+
+        {% if pagination is defined %}
+        <div class="row">
+            <nav aria-label="..." class="m-auto">
+                <ul class="pagination">
+                    {% for i in 1..pagination['number_of_pages'] %}
+                        <li class="page-item">
+                            <a class="page-link pag-link" href="
+                            {% if request.sort is defined %}
+                                /{{ ROOT }}/?page={{i}}&sort={{request.sort}}&order={{ request.order }}
+                            {% else %}
+                                /{{ ROOT }}/?page={{i}}
+                            {% endif %}
+                            " tabindex="-1">{{i}}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
+    {% endif %}
     </div>
 </div>
 

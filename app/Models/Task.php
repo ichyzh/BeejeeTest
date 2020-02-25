@@ -9,9 +9,17 @@ use Respect\Validation\Exceptions\NestedValidationException;
 
 class Task extends Model
 {
-    public function getAll() :array
+    public function getAll(array $pagination) :array
     {
-        $sql = 'SELECT * FROM `tasks`';
+        $sort = isset($_GET['sort']) ? $_GET['sort'] : 'id';
+        $order = '';
+        if (!empty($_GET['order'])) {
+            $order = $_GET['order'] == 'desc' ? 'DESC' : 'ASC';
+        }
+
+        $sql = "SELECT * FROM `tasks`
+            ORDER BY {$sort} {$order}
+            LIMIT {$pagination['this_page_result']}, {$pagination['number_of_posts']}";
 
         $task_list = $this->dbh->all($sql);
 
@@ -102,5 +110,28 @@ class Task extends Model
         $this->dbh->dbQuery($sql, $params);
 
         return [];
+    }
+
+    public function pagination() :array 
+    {
+        $pagination = [];
+        $number_of_posts = 3;
+
+        $sql = "SELECT * FROM `tasks`";
+        $res = $this->dbh->dbQuery($sql);
+
+        $number_of_photos = $res->rowCount();
+        $number_of_pages = ceil($number_of_photos/$number_of_posts);
+
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+        $this_page_result = ($page - 1)*$number_of_posts;
+        $pagination = [
+            'number_of_pages' => $number_of_pages,
+            'number_of_posts' => $number_of_posts,
+            'this_page_result' => $this_page_result
+        ];
+
+        return $pagination;
     }
 }

@@ -29,6 +29,7 @@ class View
         
         $vars['ROOT'] = ROOT;
         $vars['user'] = new User();
+        $vars['request'] = $_GET;
 
         echo $twig->render($title, $vars);
     }
