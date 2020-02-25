@@ -2,6 +2,7 @@
 
 namespace App\core;
 
+use App\Models\User;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -20,7 +21,14 @@ class View
     public function render(string $title, array $vars = [], $pag = [])
     {
         $loader = new FilesystemLoader('resources/views');
-        $twig = new Environment($loader);
+        $twig = new Environment($loader, [
+            'debug' => true
+        ]);
+
+        $twig->addExtension(new \Twig\Extension\DebugExtension());
+        
+        $vars['ROOT'] = ROOT;
+        $vars['user'] = new User();
 
         echo $twig->render($title, $vars);
     }

@@ -7,12 +7,13 @@ use PDO;
 class Db
 {
     protected $dbh;
-    protected $conf = 'app/config/db.php';
+    protected $conf_path = 'app/config/db.php';
 
     public function __construct()
     {
+        $config = require $this->conf_path;
         try {
-            $this->dbh = new PDO($this->conf['db_dsn'] . $this->conf['db_name'], $this->conf['db_user'], $this->conf['db_password'], array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            $this->dbh = new PDO($config['db_dsn'] . $config['db_name'], $config['db_user'], $config['db_password'], array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             die();

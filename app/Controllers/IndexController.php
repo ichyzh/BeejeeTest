@@ -3,11 +3,16 @@
 namespace App\Controllers;
 
 use App\core\Controller;
+use App\Models\Task;
 
 class IndexController extends Controller
 {
     public function actionIndex()
     {
-        return $this->view->render('index.twig');
+        $task = new Task();
+
+        return $this->view->render('index.twig', [
+            'task_list' => $task->getAll()
+        ]);
     }
 }

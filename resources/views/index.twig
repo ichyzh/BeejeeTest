@@ -3,40 +3,31 @@
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-        <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Username</th>
-                <th scope="col">Email</th>
-                <th scope="col">Task</th>
-                <th scope="col">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-                <td>@twitter</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="card rounded-0 my-3">
+            <div class="card-header">Task list</div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Task</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in task_list %}
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>{{ task['username'] }}</td>
+                            <td>{{ task['email'] }}</td>
+                            <td>{{ task['text'] }}</td>
+                            <td>{{ task['status'] }}</td>
+                        {% endfor %}
+                    </tbody>
+                  </table>
+            </div>
+        </div>
     </div>
 </div>
 

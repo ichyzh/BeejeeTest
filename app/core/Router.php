@@ -28,7 +28,7 @@ class Router
     public function match()
     {
         $url = substr($_SERVER['REQUEST_URI'], strlen('/' . ROOT . '/'));
-        
+
         if (($cutoff = strpos($url, '?')) !== false) {
             $url = substr($url, 0, $cutoff);
         }
