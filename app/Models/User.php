@@ -3,29 +3,43 @@
 namespace App\Models;
 
 use App\core\Model;
-
+use Respect\Validation\Validator as v;
+use Respect\Validation\Exceptions\NestedValidationException;
 class User extends Model
 {
     public function login(array $request) :array
     {
-        $params = [
-            'username' => $request['username'],
-            'password' => $request['password']
-        ];
+        $validator = v::key('username', v::stringType()->length(3,10))
+            ->key('password', v::min(3));
 
-        $sql = "SELECT * FROM `users` WHERE `username`= :username'";
-        $user = $this->dbh->row($sql, $params);
+        $errors = [];
+        try {
+            $validator->assert($request);
+        } catch(NestedValidationException $e) {
+            $errors = $e->findMessages([
+                'username' => '{{name}} length must be between 3 and 10 chars ',
+                'password' => '{{name}} must have at least 3 characters',
+            ]);
+        }
+
+        if (!empty($errors)) {
+            return $errors;
+        }
+
+        $sql = "SELECT * FROM `users` WHERE `username`= :username";
+        
+        $user = $this->dbh->row($sql, [
+            'username' => $request['username']
+        ]);
 
         if (empty($user)) {
-            echo 'Wrong Login';
-            exit();
+            return ['username' => 'Wrong username'];
         }
 
         if (hash('whirlpool', $request['password']) == $user['password']) {
             $_SESSION['signed'] = true;
         } else {
-            var_dump('wrong pwd');
-            exit();
+            return ['password' => 'Wrong password'];
         }
 
         return [];

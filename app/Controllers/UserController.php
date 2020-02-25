@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\core\Controller;
+use App\core\View;
 use App\Models\User;
 
 class UserController extends Controller
@@ -15,11 +16,16 @@ class UserController extends Controller
     public function actionLogin()
     {
         if (!isset($_POST['submit'])) {
-            
+            View::errorCode(404);
         }
         $user = new User();
 
-        $user->login($_POST);
+        $errors = $user->login($_POST);
+        if (!empty($errors)) {
+            return $this->view->render('login.twig', [
+                'errors' => $errors
+            ]);
+        }
 
         return $this->view->redirect('/' .ROOT . '/');
     }

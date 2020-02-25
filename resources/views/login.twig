@@ -6,6 +6,15 @@
         <div class="card rounded-0">
             <div class="card-header">Login</div>
             <div class="card-body">
+                {% if errors is defined %}
+                    {% for error in errors %}
+                        {% if error %}
+                            <div class="bg-danger form-control my-1">
+                                <p class="text-white">{{ error }}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
                 <form action="/{{ ROOT }}/login" method="POST">
                     <div class="form-group">
                         <label for="username">Username</label>

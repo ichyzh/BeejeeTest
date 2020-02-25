@@ -15,11 +15,25 @@ class TaskController extends Controller
 
     public function actionStore()
     {
-        if (isset($_POST['submit'])) {
-            $task = new Task();
-            $task->create($_POST);
-            var_dump('ok');
+        if (!isset($_POST['submit'])) {
+            View::errorCode(404);
         }
+
+        $task = new Task();
+        $errors = $task->create($_POST);
+
+        if (!empty($errors)) {
+            return $this->view->render('create.twig', [
+                'errors' => $errors
+            ]);
+        }
+
+        return $this->view->redirect('/' .ROOT . '/');
+
+        // return $this->view->render('index.twig', [
+        //     'task_list' => $task->getAll(),
+        //     'message' => 'Task created successfully'
+        // ]);
     }
 
     public function actionEdit()
@@ -32,7 +46,7 @@ class TaskController extends Controller
         $item = new Task();
         $task = $item->getItem($this->route['id']);
 
-        if (empty($item)) {
+        if (empty($task)) {
             View::errorCode(404);
         }
 
@@ -43,13 +57,26 @@ class TaskController extends Controller
 
     public function actionUpdate()
     {
+        $user = new User();
+        if (!$user->isAuthorized()) {
+            View::errorCode(403);
+        }
+
         if (!isset($_POST['submit'])) {
             View::errorCode(404);
         }
 
         $item = new Task();
+        $task = $item->getItem($this->route['id']);
 
-        $item->update($_POST);
+        $errors = $task->update($_POST);
+
+        if (!empty($errors)) {
+            return $this->view->render('create.twig', [
+                'task' => $task->getItem($this->route['id']),
+                'errors' => $errors
+            ]);
+        }
 
         return $this->view->redirect('/' .ROOT . '/');
     }

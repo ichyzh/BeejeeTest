@@ -12,6 +12,16 @@
                 {% endif %}
             </div>
             <div class="card-body">
+            {% if errors is defined %}
+                {% for error in errors %}
+                    {% if error %}
+                    <div class="bg-danger form-control my-1">
+                        <p class="text-white">{{ error }}</p>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
                 <form action="{% if task is defined %}/{{ ROOT }}/task/update/{{ task['id'] }}{% else %} /{{ ROOT }}/task/store {% endif %}" method="POST">
                     <div class="form-group">
                         <label for="username">Username</label>
